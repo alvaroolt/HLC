@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Dardos</string>
+    <string name="uno">1</string>
+    <string name="dos">2</string>
+    <string name="tres">3</string>
+    <string name="cuatro">4</string>
+    <string name="cinco">5</string>
+    <string name="seis">6</string>
+    <string name="siete">7</string>
+    <string name="ocho">8</string>
+    <string name="nueve">9</string>
+    <string name="diez">10</string>
+    <string name="once">11</string>
+    <string name="doce">12</string>
+    <string name="trece">13</string>
+    <string name="catorce">14</string>
+    <string name="quince">15</string>
+    <string name="dieciseis">16</string>
+    <string name="diecisiete">17</string>
+    <string name="dieciocho">18</string>
+    <string name="diecinueve">19</string>
+    <string name="veinte">20</string>
+    <string name="veinticinco">25</string>
+    <string name="cincuenta">50</string>
+    <string name="doble">x2</string>
+    <string name="triple">x3</string>
+    <string name="puntos">301</string>
+    <string name="restar">Aceptar</string>
+    <string name="jugador">Jugador</string>
+    <string name="jugador1">Jugador1</string>
+    <string name="jugador2">Jugador2</string>
+    <string name="tirar">Tirar</string>
+</resources>
