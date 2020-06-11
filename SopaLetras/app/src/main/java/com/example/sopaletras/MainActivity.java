@@ -1,25 +1,58 @@
 package com.example.sopaletras;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
+
+    RequestQueue queue;
+    String URL = "http://192.168.0.6/sopaletras/api/json.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        for(int i=0; i<10; i++){
-            for(int j=0; j<10; j++){
-                Random r = new Random();
-                ImageView img = (ImageView) findViewById(idsImagenes[i][j]);
-                img.setImageResource(letras[r.nextInt(26)]);
+        //JSON-VOLLEY
+        queue = Volley.newRequestQueue(this);
+        StringRequest request = new StringRequest(Request.Method.GET, URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                String respuesta = response.replaceAll("\\[", "");
+                respuesta = respuesta.replaceAll("\\]", "");
+                respuesta = respuesta.replaceAll("\"", "");
+                Palabra.setArrayPalabras(respuesta);
+                iniciarJuego();
             }
-        }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("error",error.toString());
+            }
+        });
+        queue.add(request);
+        //JSON-VOLLEY
+
     }
+
+    private String[] arrayLetras = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
 
     private final int idsImagenes[][] = {
             {R.id.img1, R.id.img2, R.id.img3, R.id.img4, R.id.img5, R.id.img6, R.id.img7, R.id.img8, R.id.img9, R.id.img10},
@@ -40,4 +73,87 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.m,R.drawable.n,R.drawable.o,R.drawable.p,R.drawable.q,R.drawable.r,
             R.drawable.s,R.drawable.t,R.drawable.u,R.drawable.v,R.drawable.w,R.drawable.x,
             R.drawable.y,R.drawable.z};
+
+    private final int letras2[] = {
+            R.drawable.a2,R.drawable.b2,R.drawable.c2,R.drawable.d2,R.drawable.e2,R.drawable.f2,
+            R.drawable.g2,R.drawable.h2,R.drawable.i2,R.drawable.j2,R.drawable.k2,R.drawable.l2,
+            R.drawable.m2,R.drawable.n2,R.drawable.o2,R.drawable.p2,R.drawable.q2,R.drawable.r2,
+            R.drawable.s2,R.drawable.t2,R.drawable.u2,R.drawable.v2,R.drawable.w2,R.drawable.x2,
+            R.drawable.y2,R.drawable.z2};
+
+    private Juego juego;
+    boolean pulsado = false;
+
+    private void iniciarJuego(){
+        juego = new Juego();
+        for(int i = 0; i < 10; i++){
+            for(int j = 0; j < 10; j++){
+                if(juego.getTablero().get(i).get(j) == "#"){
+                    Random r = new Random();
+                    ImageView img= (ImageView) findViewById(idsImagenes[i][j]);
+                    img.setImageResource(letras[r.nextInt(26)]);
+                }else{
+                    ImageView img= (ImageView) findViewById(idsImagenes[i][j]);
+                    img.setImageResource(letras[convertirLetraAIndice(juego.getTablero().get(i).get(j))]);
+                }
+            }
+        }
+    }
+
+    private int convertirLetraAIndice(String letra){
+        for(int i = 0; i < arrayLetras.length; i++){
+            letra = letra.replaceAll("\\*", "");
+            if(letra.equals(arrayLetras[i])){
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    public void onClick(View v){
+        if(juego.aciertos >0){
+            for(int i = 0; i<idsImagenes.length; i++){
+                for(int j = 0; j<idsImagenes[i].length; j++){
+                    if(v.getId() == idsImagenes[i][j]){
+                        if(pulsado){
+                            if(juego.comprobarSeleccion(i, j)){
+                                actualizarVista();
+                                if(juego.aciertos == 0){
+                                    Toast.makeText(MainActivity.this,"¡Has ganado!",Toast.LENGTH_LONG).show();
+                                }
+                            }
+                            pulsado = false;
+                        }else{
+                            pulsado = true;
+                            juego.setAlmacenado(i, j);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void actualizarVista(){
+        for(int i = 0; i < 10; i++){
+            for(int j = 0; j < 10; j++){
+                if(juego.getTablero().get(i).get(j).length() >1){
+                    ImageView img= (ImageView) findViewById(idsImagenes[i][j]);
+                    img.setImageResource(letras2[convertirLetraAIndice(juego.getTablero().get(i).get(j))]);
+                }
+            }
+        }
+    }
+
+    public static void reiniciarActivity(Activity actividad){
+        Intent intent=new Intent();
+        intent.setClass(actividad, actividad.getClass());
+        actividad.startActivity(intent);
+        actividad.finish();
+    }
+
+    public void onClick_buttonReiniciar(View v){
+        reiniciarActivity(this);
+    }
+
 }
+
