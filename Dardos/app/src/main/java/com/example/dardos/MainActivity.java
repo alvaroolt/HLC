@@ -1,24 +1,22 @@
 package com.example.dardos;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.DialogInterface;
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+//NO CONSIGO QUE FUNCIONE
+
 public class MainActivity extends AppCompatActivity {
     private int puntos = 0;
     private int totalPuntos = 0;
-    private Button aceptar;
     private Button btndoble;
     private Button btntriple;
     private TextView marcador;
-    private TextView jugador;
     private int multiplicador = 1;
     private String jugadorActual="";
     private int puntos1 = 0;
@@ -33,16 +31,21 @@ public class MainActivity extends AppCompatActivity {
         final String puntaje2 = getIntent().getStringExtra("puntos2");
 
         marcador = (TextView) findViewById(R.id.puntos);
-        jugador = (TextView) findViewById(R.id.jugador);
+        TextView jugador = (TextView) findViewById(R.id.jugador);
         jugadorActual = nombre;
 
+        assert jugadorActual != null;
         if (jugadorActual.contains("1")) {
+            assert puntaje1 != null;
             totalPuntos = Integer.parseInt(puntaje1);
             marcador.setText(puntaje1);
+            assert puntaje2 != null;
             puntos2 = Integer.parseInt(puntaje2);
         } else {
+            assert puntaje2 != null;
             totalPuntos = Integer.parseInt(puntaje2);
             marcador.setText(puntaje2);
+            assert puntaje1 != null;
             puntos1 = Integer.parseInt(puntaje1);
         }
 
@@ -50,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         jugador.setText(nombre);
 
 
-        aceptar = (Button) findViewById(R.id.aceptar);
+        Button aceptar = (Button) findViewById(R.id.aceptar);
         btndoble = (Button) findViewById(R.id.btndoble);
         btntriple = (Button) findViewById(R.id.btntriple);
 
@@ -76,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
         Button veinte = (Button) findViewById(R.id.btn20);
         Button veinticinco = (Button) findViewById(R.id.btn25);
         Button cincuenta = (Button) findViewById(R.id.btn50);
-
 
 
         uno.setOnClickListener(new View.OnClickListener() {
@@ -243,6 +245,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         aceptar.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onClick(View v) {
                 totalPuntos = Integer.parseInt(marcador.getText().toString());

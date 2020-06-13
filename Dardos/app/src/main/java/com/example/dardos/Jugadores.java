@@ -1,20 +1,20 @@
 package com.example.dardos;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class Jugadores extends AppCompatActivity {
     private int totalPuntos1 = 301;
     private int totalPuntos2 = 301;
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,8 +36,10 @@ public class Jugadores extends AppCompatActivity {
             String puntaje1 = getIntent().getStringExtra("puntos1");
             String puntaje2 = getIntent().getStringExtra("puntos2");
 
+            assert puntaje1 != null;
             totalPuntos1 = Integer.parseInt(puntaje1);
 
+            assert puntaje2 != null;
             totalPuntos2 = Integer.parseInt(puntaje2);
         }
         puntos1.setText(Integer.toString(totalPuntos1));
