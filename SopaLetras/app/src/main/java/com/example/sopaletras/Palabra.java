@@ -3,113 +3,124 @@ package com.example.sopaletras;
 import java.util.Random;
 
 public class Palabra {
-    public int x;
-    public int y;
+
+    public int fila;
+    public int columna;
+    public int filaInicial;
+    public int columnaInicial;
     
-    public int xInicial;
-    public int yInicial;
-    
-    public int direccion;
+    public int sentido;
     public String[] arrayPalabra;
     public String palabra;
-
     public static String[] arrayPalabras;
 
     public Palabra(){
-        Random r = new Random();
-        this.palabra = arrayPalabras[r.nextInt(arrayPalabras.length)];
+        Random numAleatorio = new Random();
+        this.palabra = arrayPalabras[numAleatorio.nextInt(arrayPalabras.length)];
+
+        // array de las letras de la palabra, separadas
         this.arrayPalabra = this.palabra.split("");
-        this.x = r.nextInt(10);
-        this.y = r.nextInt(10);
-        this.xInicial = this.x;
-        this.yInicial = this.y;
-        this.direccion = r.nextInt(arrayPalabras.length);
+
+        // coordenada x en el eje cartesiano
+        this.fila = numAleatorio.nextInt(10);
+
+        // coordenada y en el eje cartesiano
+        this.columna = numAleatorio.nextInt(10);
+
+        // fila donde comienza la palabra en el tablero
+        this.filaInicial = this.fila;
+
+        // columna donde comienza la palabra en el tablero
+        this.columnaInicial = this.columna;
+
+        // asigna un valor que se corresponde al sentido y dirección de la palabra
+        this.sentido = numAleatorio.nextInt(arrayPalabras.length);
     }
-    public void calcularDireccion(){
-        switch (this.direccion) {
+    public void calcularSentido(){
+        switch (this.sentido) {
             case 0:
                 //Si la direccion es 0, el orden de la palabra es de abajo a arriba
-                this.x -= 1;
+                this.fila -= 1;
                 break;
             case 1:
-                //Si la direccion es 0, el orden de la palabra es de izquierda a derecha
-                this.y += 1;
+                //Si la direccion es 1, el orden de la palabra es de izquierda a derecha
+                this.columna += 1;
                 break;
             case 2:
-                //Si la direccion es 0, el orden de la palabra es de arriba a abajo
-                this.x += 1;
+                //Si la direccion es 2, el orden de la palabra es de arriba a abajo
+                this.fila += 1;
                 break;
             case 3:
-                //Si la direccion es 0, el orden de la palabra es de derecha a izquierda
-                this.y -= 1;
+                //Si la direccion es 3, el orden de la palabra es de derecha a izquierda
+                this.columna -= 1;
                 break;
             case 4:
-                //Si la direccion es 0, el orden de la palabra es de abajo izquierda a arriba derecha
-                this.x -= 1;
-                this.y += 1;
+                //Si la direccion es 4, el orden de la palabra es de abajo izquierda a arriba derecha
+                this.fila -= 1;
+                this.columna += 1;
                 break;
             case 5:
-                //Si la direccion es 0, el orden de la palabra es de abajo derecha a arriba izquierda
-                this.x -= 1;
-                this.y -= 1;
+                //Si la direccion es 5, el orden de la palabra es de abajo derecha a arriba izquierda
+                this.fila -= 1;
+                this.columna -= 1;
                 break;
             case 6:
-                //Si la direccion es 0, el orden de la palabra es de arriba izquierda a abajo derecha
-                this.x += 1;
-                this.y += 1;
+                //Si la direccion es 6, el orden de la palabra es de arriba izquierda a abajo derecha
+                this.fila += 1;
+                this.columna += 1;
                 break;
             case 7:
-                //Si la direccion es 0, el orden de la palabra es de arriba drecha a abajo izquierda
-                this.x += 1;
-                this.y -= 1;
+                //Si la direccion es 7, el orden de la palabra es de arriba drecha a abajo izquierda
+                this.fila += 1;
+                this.columna -= 1;
                 break;
         }
     }
 
-    public void retrocederDireccion(){
-        switch (this.direccion) {
+    public void retrocederSentido(){
+        switch (this.sentido) {
             case 0:
-                //Abajo arriba
-                this.x += 1;
+                //Si la direccion es 0, el orden de la palabra es de abajo a arriba
+                this.fila += 1;
                 break;
             case 1:
-                //Izquierda derecha
-                this.y -= 1;
+                //Si la direccion es 1, el orden de la palabra es de izquierda a derecha
+                this.columna -= 1;
                 break;
             case 2:
-                //Arriba abajo
-                this.x -= 1;
+                //Si la direccion es 2, el orden de la palabra es de arriba a abajo
+                this.fila -= 1;
                 break;
             case 3:
-                //Derecha izquierda
-                this.y += 1;
+                //Si la direccion es 3, el orden de la palabra es de derecha a izquierda
+                this.columna += 1;
                 break;
             case 4:
-                //Abajo izquierda - Arriba derecha
-                this.x += 1;
-                this.y -= 1;
+                //Si la direccion es 4, el orden de la palabra es de abajo izquierda a arriba derecha
+                this.fila += 1;
+                this.columna -= 1;
                 break;
             case 5:
-                //Abajo derecha - Arriba izquierda
-                this.x += 1;
-                this.y += 1;
+                //Si la direccion es 5, el orden de la palabra es de abajo derecha a arriba izquierda
+                this.fila += 1;
+                this.columna += 1;
                 break;
             case 6:
-                //Arriba izquierda - Abajo derecha
-                this.x -= 1;
-                this.y -= 1;
+                //Si la direccion es 6, el orden de la palabra es de arriba izquierda a abajo derecha
+                this.fila -= 1;
+                this.columna -= 1;
                 break;
             case 7:
-                //Arriba derecha - Abajo izquierda
-                this.x -= 1;
-                this.y += 1;
+                //Si la direccion es 7, el orden de la palabra es de arriba drecha a abajo izquierda
+                this.fila -= 1;
+                this.columna += 1;
                 break;
         }
     }
 
     public void revertirPalabra(){
-        this.x = this.xInicial;
-        this.y = this.yInicial;
+        this.fila = this.filaInicial;
+        this.columna = this.columnaInicial;
     }
 
     public static void setArrayPalabras(String aP){

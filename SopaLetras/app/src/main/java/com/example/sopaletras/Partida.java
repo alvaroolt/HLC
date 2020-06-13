@@ -2,26 +2,30 @@ package com.example.sopaletras;
 
 import java.util.ArrayList;
 
-public class Juego {
+public class Partida {
 
     private ArrayList<ArrayList<String>> tablero;
+
+    // ancho del tablero
     private int ancho = 10;
+
+    // alto del tablero
     private int alto = 10;
 
-    private int xAlmacenada;
-    private int yAlmacenada;
+    private int filaAlmacenada;
+    private int columnaAlmacenada;
 
-    public int aciertos = 5;
+    // número de aciertos para ganar la partida
+    public int aciertosTotales = 5;
 
     private ArrayList<Palabra> arrayPalabras = new ArrayList<>();
 
-    public Juego(){
+    public Partida(){
         tablero = new ArrayList<>();
         for(int i = 0; i<this.alto; i++){
             this.tablero.add(new ArrayList<String>());
             for(int j = 0; j<this.ancho; j++){
                 this.tablero.get(i).add("#");
-
             }
         }
         generarTablero();
@@ -31,7 +35,7 @@ public class Juego {
         boolean noValido;
         int contador = 5;
         ArrayList<String> arrayPalabrasRepetidas = new ArrayList<>();
-        arrayPalabrasRepetidas.add("AAAAAAA");
+        arrayPalabrasRepetidas.add("XXXXXXX");
         do{
             Palabra palabra;
             do{
@@ -40,23 +44,24 @@ public class Juego {
                 palabra = new Palabra();
 
                 for(String pal : arrayPalabrasRepetidas){
-                    if(pal == palabra.palabra){
+                    if (pal.equals(palabra.palabra)) {
                         noValido = true;
+                        break;
                     }
                 }
 
                 if(!noValido){
                     for(int i = 0; i< palabra.arrayPalabra.length; i++){
-                        if(palabra.x < 0 || palabra.y <0 || palabra.x>=alto || palabra.y>=ancho){
+                        if(palabra.fila < 0 || palabra.columna <0 || palabra.fila>=alto || palabra.columna>=ancho){
                             noValido = true;
                         }else{
-                            if(this.tablero.get(palabra.x).get(palabra.y) != "#"){
-                                if(this.tablero.get(palabra.x).get(palabra.y) != palabra.arrayPalabra[i]){
+                            if(!this.tablero.get(palabra.fila).get(palabra.columna).equals("#")){
+                                if(!this.tablero.get(palabra.fila).get(palabra.columna).equals(palabra.arrayPalabra[i])){
                                     noValido = true;
                                 }
                             }
                         }
-                        palabra.calcularDireccion();
+                        palabra.calcularSentido();
                     }
                 }
             }while(noValido);
@@ -69,43 +74,41 @@ public class Juego {
     private void actualizarTablero(Palabra palabra){
         palabra.revertirPalabra();
         for(int i = 0; i< palabra.arrayPalabra.length; i++){
-            this.tablero.get(palabra.x).set(palabra.y, palabra.arrayPalabra[i]);
-            palabra.calcularDireccion();
+            this.tablero.get(palabra.fila).set(palabra.columna, palabra.arrayPalabra[i]);
+            palabra.calcularSentido();
         }
-        palabra.retrocederDireccion();
+        palabra.retrocederSentido();
         this.arrayPalabras.add(palabra);
     }
 
     private void actualizarTableroEncontrado(Palabra palabra){
         palabra.revertirPalabra();
         for(int i = 0; i< palabra.arrayPalabra.length; i++){
-            this.tablero.get(palabra.x).set(palabra.y, palabra.arrayPalabra[i]+"*");
-            palabra.calcularDireccion();
+            this.tablero.get(palabra.fila).set(palabra.columna, palabra.arrayPalabra[i]+"*");
+            palabra.calcularSentido();
         }
-        this.aciertos--;
+        this.aciertosTotales--;
     }
 
     public void setAlmacenado(int x, int y){
-        this.xAlmacenada = x;
-        this.yAlmacenada = y;
-
+        this.filaAlmacenada = x;
+        this.columnaAlmacenada = y;
     }
 
     public boolean comprobarSeleccion(int x, int y){
-        if(x != this.xAlmacenada || y != this.yAlmacenada){
-            Palabra palabraCoincidente = new Palabra();
+        if(x != this.filaAlmacenada || y != this.columnaAlmacenada){
+            Palabra coincidePalabra = new Palabra();
             boolean encontrado = false;
             for(Palabra palabra: this.arrayPalabras){
-
-                if(palabra.xInicial == this.xAlmacenada){
-                    if(palabra.yInicial == this.yAlmacenada){
-                        palabraCoincidente = palabra;
+                if(palabra.filaInicial == this.filaAlmacenada){
+                    if(palabra.columnaInicial == this.columnaAlmacenada){
+                        coincidePalabra = palabra;
                         encontrado = true;
                     }
                 }
-                if(palabra.x == this.xAlmacenada){
-                    if(palabra.y == this.yAlmacenada){
-                        palabraCoincidente = palabra;
+                if(palabra.fila == this.filaAlmacenada){
+                    if(palabra.columna == this.columnaAlmacenada){
+                        coincidePalabra = palabra;
                         encontrado = true;
                     }
                 }
@@ -113,17 +116,17 @@ public class Juego {
 
             if(encontrado){
                 for(Palabra palabra: this.arrayPalabras){
-                    if(palabra.xInicial == x){
-                        if(palabra.yInicial == y){
-                            if(palabraCoincidente.palabra == palabra.palabra){
+                    if(palabra.filaInicial == x){
+                        if(palabra.columnaInicial == y){
+                            if(coincidePalabra.palabra.equals(palabra.palabra)){
                                 actualizarTableroEncontrado(palabra);
                                 return true;
                             }
 
                         }
-                    }if(palabra.x == x){
-                        if(palabra.y == y){
-                            if(palabraCoincidente.palabra == palabra.palabra){
+                    }if(palabra.fila == x){
+                        if(palabra.columna == y){
+                            if(coincidePalabra.palabra.equals(palabra.palabra)){
                                 actualizarTableroEncontrado(palabra);
                                 return true;
                             }
