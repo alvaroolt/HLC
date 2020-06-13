@@ -1,27 +1,24 @@
 package com.example.puzleinfantil;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    private int contador1 = 0;
-    private int contador2 = 0;
-    private int contador3 = 0;
+    private int valor1 = 0;
+    private int valor2 = 0;
+    private int valor3 = 0;
 
-    ArrayList<String> puzles = new ArrayList<String>();
+    ArrayList<String> puzzle = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,57 +28,60 @@ public class MainActivity extends AppCompatActivity {
         final Button pieza1 = findViewById(R.id.pieza1);
         final Button pieza2 = findViewById(R.id.pieza2);
         final Button pieza3 = findViewById(R.id.pieza3);
-        final Button reiniciar  = findViewById(R.id.reiniciar);
+        final Button reiniciar  = findViewById(R.id.buttonReiniciar);
 
-        puzles.add("abeja");
-        puzles.add("arana");
-        puzles.add("caracol");
-        puzles.add("mariquita");
-        puzles.add("oruga");
+        puzzle.add("arana");
+        puzzle.add("abeja");
+        puzzle.add("oruga");
+        puzzle.add("mariquita");
+        puzzle.add("caracol");
 
-        contador1 = (int) Math.floor(Math.random()*puzles.size());
-        contador2 = (int) Math.floor(Math.random()*puzles.size());
-        contador3 = (int) Math.floor(Math.random()*puzles.size());
+        // recogen un valor entero aleatorio entre 0 y el tamaño de puzles (arraylist) para elegir la pieza inicial que muestra
+        valor1 = (int) Math.floor(Math.random()* puzzle.size());
+        valor2 = (int) Math.floor(Math.random()* puzzle.size());
+        valor3 = (int) Math.floor(Math.random()* puzzle.size());
 
 
-        String imagen1 =  puzles.get(contador1).concat(String.valueOf(1));
-        pieza1.setBackgroundResource(getResources().getIdentifier(imagen1, "drawable", getPackageName()));
+        String imagenpuzle1 =  puzzle.get(valor1).concat(String.valueOf(1));
+        pieza1.setBackgroundResource(getResources().getIdentifier(imagenpuzle1, "drawable", getPackageName()));
 
-        String imagen2 =  puzles.get(contador2).concat(String.valueOf(2));
-        pieza2.setBackgroundResource(getResources().getIdentifier(imagen2, "drawable", getPackageName()));
+        String imagenpuzle2 =  puzzle.get(valor2).concat(String.valueOf(2));
+        pieza2.setBackgroundResource(getResources().getIdentifier(imagenpuzle2, "drawable", getPackageName()));
 
-        String imagen3 =  puzles.get(contador3).concat(String.valueOf(3));
-        pieza3.setBackgroundResource(getResources().getIdentifier(imagen3, "drawable", getPackageName()));
+        String imagenpuzle3 =  puzzle.get(valor3).concat(String.valueOf(3));
+        pieza3.setBackgroundResource(getResources().getIdentifier(imagenpuzle3, "drawable", getPackageName()));
 
+        final String mensajeGanador = "Has ganado";
 
         pieza1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                contador1++;
+                valor1++;
 
-                if (contador1 > (puzles.size()-1)){
-                    contador1 = 0;
+                //si el usuario pincha en la imagen y llega hasta el final, de esta manera consigo que vuelva al inicio del array
+                if (valor1 > (puzzle.size()-1)){
+                    valor1 = 0;
                 }
-                if (contador2 > (puzles.size()-1)) {
-                    contador2 = 0;
+                if (valor2 > (puzzle.size()-1)) {
+                    valor2 = 0;
                 }
-                if (contador3 > (puzles.size()-1)) {
-                    contador3 = 0;
+                if (valor3 > (puzzle.size()-1)) {
+                    valor3 = 0;
                 }
 
-                String imagen1 =  puzles.get(contador1).concat(String.valueOf(1));
-
+                // uno el nombre de la pieza junto a su numero, para que me de el nombre del archivo jpg correcto
+                String imagen1 =  puzzle.get(valor1).concat(String.valueOf(1));
                 pieza1.setBackgroundResource(getResources().getIdentifier(imagen1, "drawable", getPackageName()));
 
-                if (contador1 == contador2 && contador2 == contador3 && contador1 == contador3){
+                if (valor1 == valor2 && valor2 == valor3){
                     pieza1.setEnabled(false);
                     pieza2.setEnabled(false);
                     pieza3.setEnabled(false);
 
-                    Toast gana =
+                    Toast ganar =
                             Toast.makeText(getApplicationContext(),
-                                    "¡HAS GANADO!", Toast.LENGTH_LONG);
-                    gana.show();
+                                    mensajeGanador, Toast.LENGTH_LONG);
+                    ganar.show();
                 }
             }
         });
@@ -89,91 +89,83 @@ public class MainActivity extends AppCompatActivity {
         pieza2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                contador2++;
+                valor2++;
 
-                if (contador1 > (puzles.size()-1)){
-                    contador1 = 0;
+                //si el usuario pincha en la imagen y llega hasta el final, de esta manera consigo que vuelva al inicio del array
+                if (valor1 > (puzzle.size()-1)){
+                    valor1 = 0;
                 }
-                if (contador2 > (puzles.size()-1)) {
-                    contador2 = 0;
+                if (valor2 > (puzzle.size()-1)) {
+                    valor2 = 0;
                 }
-                if (contador3 > (puzles.size()-1)) {
-                    contador3 = 0;
+                if (valor3 > (puzzle.size()-1)) {
+                    valor3 = 0;
                 }
 
-                String imagen2 =  puzles.get(contador2).concat(String.valueOf(2));
-
+                // uno el nombre de la pieza junto a su numero, para que me de el nombre del archivo jpg correcto
+                String imagen2 =  puzzle.get(valor2).concat(String.valueOf(2));
                 pieza2.setBackgroundResource(getResources().getIdentifier(imagen2, "drawable", getPackageName()));
 
-                if (contador1 == contador2 && contador2 == contador3 && contador1 == contador3){
+                if (valor1 == valor2 && valor2 == valor3){
                     pieza1.setEnabled(false);
                     pieza2.setEnabled(false);
                     pieza3.setEnabled(false);
 
-                    Toast gana =
+                    Toast ganar =
                             Toast.makeText(getApplicationContext(),
-                                    "Enhorabuena, ¡HAS GANADO!", Toast.LENGTH_LONG);
+                                    mensajeGanador, Toast.LENGTH_LONG);
 
-                    gana.show();
+                    ganar.show();
                 }
             }
         });
+
 
         pieza3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                contador3++;
+                valor3++;
 
-                if (contador1 > (puzles.size()-1)){
-                    contador1 = 0;
+                //si el usuario pincha en la imagen y llega hasta el final, de esta manera consigo que vuelva al inicio del array
+                if (valor1 > (puzzle.size()-1)){
+                    valor1 = 0;
                 }
-                if (contador2 > (puzles.size()-1)) {
-                    contador2 = 0;
+                if (valor2 > (puzzle.size()-1)) {
+                    valor2 = 0;
                 }
-                if (contador3 > (puzles.size()-1)) {
-                    contador3 = 0;
+                if (valor3 > (puzzle.size()-1)) {
+                    valor3 = 0;
                 }
 
-                String imagen3 =  puzles.get(contador3).concat(String.valueOf(3));
-
+                // uno el nombre de la pieza junto a su numero, para que me de el nombre del archivo jpg correcto
+                String imagen3 =  puzzle.get(valor3).concat(String.valueOf(3));
                 pieza3.setBackgroundResource(getResources().getIdentifier(imagen3, "drawable", getPackageName()));
 
-                if (contador1 == contador2 && contador2 == contador3 && contador1 == contador3){
+                if (valor1 == valor2 && valor2 == valor3){
                     pieza1.setEnabled(false);
                     pieza2.setEnabled(false);
                     pieza3.setEnabled(false);
 
-                    Toast gana =
+                    Toast ganar =
                             Toast.makeText(getApplicationContext(),
-                                    "¡HAS GANADO!", Toast.LENGTH_LONG);
+                                    mensajeGanador, Toast.LENGTH_LONG);
 
-                    gana.show();
+                    ganar.show();
 
                 }
-            }
-        });
-
-        reiniciar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = getIntent();
-                overridePendingTransition(0, 0);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                finish();
-                overridePendingTransition(0, 0);
-                startActivity(intent);
             }
         });
 
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    public static void reiniciarActivity(Activity actividad){
+        Intent intent=new Intent();
+        intent.setClass(actividad, actividad.getClass());
+        actividad.startActivity(intent);
+        actividad.finish();
+    }
 
-        return super.onOptionsItemSelected(item);
+    public void onClick_buttonReiniciar(View v){
+        reiniciarActivity(this);
     }
 }
